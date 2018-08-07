@@ -1,0 +1,19 @@
+{
+  "name": "yes",
+  "version": "1.0.0",
+  "description": "mongodb fundamentals",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ryanhustler420/Node.git"
+  },
+  "author": "GauravGupta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ryanhustler420/Node/issues"
+  },
+  "homepage": "https://github.com/Ryanhustler420/Node#readme"
+}
