@@ -4,21 +4,26 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/todos');
 
 
- var Todo = mongoose.model('todo', {
-   text:{
-     type:String
-   },
-   compeleted:{
-     type:Boolean
-   },
-   completedAt:{
-     type:Number
-   }
- });
-
-
+//  var Todo = mongoose.model('todo', {
+//    text:{
+//      type:String,
+//      required: true,
+//      minlength: 1,
+//      trim:true
+//    },
+//    compeleted:{
+//      type:Boolean,
+//      default:false
+//    },
+//    completedAt:{
+//      type:Number,
+//      default:null
+//    }
+//  });
+//
+//
 // var newTodo = new Todo({
-//   text:"Cook dinner"
+//   text:" Edit this video  "
 // });
 //
 // newTodo.save().then((doc) => {
@@ -29,15 +34,26 @@ mongoose.connect('mongodb://localhost:27017/todos');
 
 //challange
 
+//make users schema
+//email -require it - trim it - set type - set min length of 1
 
-var newTodo = new Todo({
-  text:"make home work for school",
-  compeleted:false,
-  completedAt:120918
+var User = mongoose.model('User',{
+  email:{
+    type:String,
+    trim:true,
+    required:true,
+    minlength:1
+  }
 });
 
-newTodo.save().then((doc) => {
-  console.log('Saved todo',doc);
+
+var anUser = new User({
+  email:"Gauravgupta983@gmail.com"
+});
+
+
+anUser.save().then((res) => {
+  console.log("inserted one record");
 },(e) => {
-  console.log("unable to insert");
-})
+  console.log('Unable to insert to databse');
+});
