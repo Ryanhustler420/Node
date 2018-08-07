@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Ryanhustler420/Node#readme",
   "dependencies": {
-    "mongodb": "^2.2.33"
+    "mongodb": "^2.2.33",
+    "mongoose": "^5.2.7"
   }
 }
