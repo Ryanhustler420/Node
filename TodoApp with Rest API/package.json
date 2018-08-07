@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Ryanhustler420/Node/issues"
   },
-  "homepage": "https://github.com/Ryanhustler420/Node#readme"
+  "homepage": "https://github.com/Ryanhustler420/Node#readme",
+  "dependencies": {
+    "mongodb": "^2.2.33"
+  }
 }
