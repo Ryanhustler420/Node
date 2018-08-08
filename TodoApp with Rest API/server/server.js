@@ -52,7 +52,6 @@ app.get('/todos/:id',(req,res) => {
     //404 - sand with empty body
 
     Todo.findById(_id).then((todo) => {
-      console.log('reached');
       if(!todo){
         //if null send null body
         return res.status(404).send({});
