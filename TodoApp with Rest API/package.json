@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Ryanhustler420/Node#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
     "mongodb": "^2.2.33",
     "mongoose": "^5.2.7"
   }

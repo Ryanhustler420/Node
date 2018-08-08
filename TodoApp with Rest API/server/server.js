@@ -1,59 +1,32 @@
-var mongoose = require('mongoose');
+var express = require('express');
+var bodyParser = require('body-parser');
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/todos');
+var { mongoose } = require('./db/mongoose');
+var { User } = require('./models/users');
+var { Todo } = require('./models/todos');
 
 
-//  var Todo = mongoose.model('todo', {
-//    text:{
-//      type:String,
-//      required: true,
-//      minlength: 1,
-//      trim:true
-//    },
-//    compeleted:{
-//      type:Boolean,
-//      default:false
-//    },
-//    completedAt:{
-//      type:Number,
-//      default:null
-//    }
-//  });
-//
-//
-// var newTodo = new Todo({
-//   text:" Edit this video  "
-// });
-//
-// newTodo.save().then((doc) => {
-//   console.log('Saved todo',doc);
-// },(e) => {
-//   console.log("unable to insert");
-// })
+var app = express();
+//Middleware
+app.use(bodyParser.json());
 
-//challange
+// CRUD METHOD
 
-//make users schema
-//email -require it - trim it - set type - set min length of 1
-
-var User = mongoose.model('User',{
-  email:{
-    type:String,
-    trim:true,
-    required:true,
-    minlength:1
-  }
+// post todos
+app.post('/todos',(req,res) => {
+  // console.log(req.body);
+  var todo = new Todo({
+    text:req.body.text
+  })
+  todo.save().then((doc) => {
+    res.send(doc)
+  },(e) => {
+    res.status(400).send(e);
+  })
 });
 
 
-var anUser = new User({
-  email:"Gauravgupta983@gmail.com"
-});
 
-
-anUser.save().then((res) => {
-  console.log("inserted one record");
-},(e) => {
-  console.log('Unable to insert to databse');
+app.listen(3000,() => {
+  console.log("server running");
 });
