@@ -4,7 +4,11 @@
   "description": "mongodb fundamentals",
   "main": "index.js",
   "scripts": {
+    "start":"node server/server.js",
     "test": "mocha \" **/*.test.js \""
+  },
+  "engines":{
+    "node":"10.4.0"
   },
   "repository": {
     "type": "git",

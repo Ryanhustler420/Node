@@ -8,6 +8,7 @@ var { Todo } = require('./models/todos');
 
 
 var app = express();
+const port = process.env.PORT || 3000;
 //Middleware
 app.use(bodyParser.json());
 
@@ -71,8 +72,8 @@ app.get('/todos/:id',(req,res) => {
 
 });
 
-app.listen(3000,() => {
-  console.log("server running");
+app.listen(port,() => {
+  console.log(`Starting up at port ${port}`);
 });
 
 module.exports = {app};
