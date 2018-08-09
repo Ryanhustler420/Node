@@ -26,7 +26,6 @@ process.on('unhandledRejection', (reason, promise) => {
 
 // post todos
 app.post('/todos',(req,res) => {
-  console.log(req.body.text);
   var todo = new Todo({
     text:req.body.text
   })
@@ -72,7 +71,7 @@ app.get('/todos/:id',(req,res) => {
     });
 });
 
-Promise.reject(new Error('caught some error'));
+Promise.reject(new Error('Following Errors:'));
 
 app.listen(port,() => {
   console.log(`Starting up at port ${port}`,'new service starts here');
