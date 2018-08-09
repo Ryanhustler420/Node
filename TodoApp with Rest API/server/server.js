@@ -16,9 +16,9 @@ app.use(bodyParser.json());
 
 process.on('unhandledRejection', (reason, promise) => {
 
-  console.log('Unhandled Rejection at:=========================');
+  console.log('Unhandled Rejection at:==========================================');
   console.log(reason);
-  console.log('Unhandled Rejection at:=========================');
+  console.log('Unhandled Rejection at:==========================================');
   // Recommended: send the information to sentry.io
   // or whatever crash reporting service you use
 })
@@ -71,10 +71,34 @@ app.get('/todos/:id',(req,res) => {
     });
 });
 
+app.delete('/todos/:id',(req,res) => {
+    var id = req.params.id;
+    // get the id
+    if(!ObjectID.isValid(id)){
+      //valid the id -> not valid ? return 404
+      return res.status(404).send();
+    }
+
+    //remove todo by id
+    Todo.findByIdAndRemove(id).then((doc)=>{
+    //success
+    if(!doc){
+      //if no doc, send 404
+      return res.status(404).send({});
+    }
+    //if doc,send back with 200
+    res.send(doc);
+    //error
+}).catch(e => {
+    //400 with empty body
+    res.status(404).send();
+    });
+});
+
 Promise.reject(new Error('Following Errors:'));
 
 app.listen(port,() => {
   console.log(`Starting up at port ${port}`,'new service starts here');
 });
 
-// module.exports = {app};
+// module.exports = {app}; uncommand for TTD
