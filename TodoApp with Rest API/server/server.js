@@ -14,17 +14,27 @@ app.use(bodyParser.json());
 
 // CRUD METHOD
 
+process.on('unhandledRejection', (reason, promise) => {
+
+  console.log('Unhandled Rejection at:=========================');
+  console.log(reason);
+  console.log('Unhandled Rejection at:=========================');
+  // Recommended: send the information to sentry.io
+  // or whatever crash reporting service you use
+})
+
+
 // post todos
 app.post('/todos',(req,res) => {
-  // console.log(req.body);
+  console.log(req.body.text);
   var todo = new Todo({
     text:req.body.text
   })
   todo.save().then((doc) => {
-    res.send(doc)
+    res.status(200).send(doc);
   },(e) => {
     res.status(400).send(e);
-  })
+  }).catch(console.log);
 });
 
 
@@ -35,8 +45,8 @@ app.get('/todos',(req,res) => {
     });
   },(e) => {
     res.status(400).send(e);
-  });
-})
+  }).catch(console.log);
+});
 
 //fetching ID from url
 // GET /todos/0123456789
@@ -49,8 +59,6 @@ app.get('/todos/:id',(req,res) => {
     if(!ObjectID.isValid(_id)){
       return res.status(404).send({});
     }
-    //validate id isValid
-    //404 - sand with empty body
 
     Todo.findById(_id).then((todo) => {
       if(!todo){
@@ -62,18 +70,12 @@ app.get('/todos/:id',(req,res) => {
     }).catch(e => {
       res.status(400).send({})
     });
-
-    //findById
-      //sucess case
-        //if todo send back
-        // if not todo  send- back 404 with empty body
-      //error =
-        // 400 status [send nothing back]
-
 });
+
+Promise.reject(new Error('caught some error'));
 
 app.listen(port,() => {
-  console.log(`Starting up at port ${port}`);
+  console.log(`Starting up at port ${port}`,'new service starts here');
 });
 
-module.exports = {app};
+// module.exports = {app};
