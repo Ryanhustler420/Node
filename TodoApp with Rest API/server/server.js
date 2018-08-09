@@ -1,6 +1,7 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var {ObjectID} = require('mongodb');
+const _ = require('lodash');
+const express = require('express');
+const bodyParser = require('body-parser');
+const {ObjectID} = require('mongodb');
 
 var { mongoose } = require('./db/mongoose');
 var { User } = require('./models/users');
@@ -95,11 +96,44 @@ app.delete('/todos/:id',(req,res) => {
     });
 });
 
+
+app.patch('/todos/:id',(req,res) => {
+  var id = req.params.id;
+  var body = _.pick(req.body,['text','completed']);
+
+  if(!ObjectID.isValid(id)){
+    //valid the id -> not valid ? return 404
+    return res.status(404).send();
+  }
+
+  if(_.isBoolean(body.completed) && body.completed){
+    //true
+    body.completedAt = new Date().getTime();
+  }else{
+    //false
+    body.completed = false;
+    body.completedAt = null;
+  }
+
+  Todo.findByIdAndUpdate(id,{$set:body},{new:true}).then((todo) => {
+    if(!todo){
+      return res.status(404).send();
+    }
+    res.send({todo});
+  }).catch(e => {
+    res.status(400).send();
+  })
+});
+
+
+
 Promise.reject(new Error('Following Errors:'));
 
 app.listen(port,() => {
   console.log(`Starting up at port ${port}`,'new service starts here');
 });
 
+
+
 // module.exports = {app}; uncommand for TTD
-module.exports = {app};
+// module.exports = {app};
