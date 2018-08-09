@@ -80,14 +80,14 @@ app.delete('/todos/:id',(req,res) => {
     }
 
     //remove todo by id
-    Todo.findByIdAndRemove(id).then((doc)=>{
+    Todo.findByIdAndRemove(id).then((todo)=>{
     //success
-    if(!doc){
+    if(!todo){
       //if no doc, send 404
       return res.status(404).send({});
     }
     //if doc,send back with 200
-    res.send(doc);
+    res.send({todo});
     //error
 }).catch(e => {
     //400 with empty body
@@ -102,3 +102,4 @@ app.listen(port,() => {
 });
 
 // module.exports = {app}; uncommand for TTD
+module.exports = {app};
