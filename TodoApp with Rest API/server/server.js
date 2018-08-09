@@ -99,19 +99,19 @@ app.delete('/todos/:id',(req,res) => {
 
 app.patch('/todos/:id',(req,res) => {
   var id = req.params.id;
-  var body = _.pick(req.body,['text','completed']);
+  var body = _.pick(req.body,['text','compeleted']);
 
   if(!ObjectID.isValid(id)){
     //valid the id -> not valid ? return 404
     return res.status(404).send();
   }
 
-  if(_.isBoolean(body.completed) && body.completed){
+  if(_.isBoolean(body.compeleted) && body.compeleted){
     //true
     body.completedAt = new Date().getTime();
   }else{
     //false
-    body.completed = false;
+    body.compeleted = false;
     body.completedAt = null;
   }
 
@@ -136,4 +136,4 @@ app.listen(port,() => {
 
 
 // module.exports = {app}; uncommand for TTD
-// module.exports = {app};
+module.exports = {app};
