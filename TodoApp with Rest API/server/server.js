@@ -34,9 +34,9 @@ app.post('/todos',(req,res) => {
   })
   todo.save().then((doc) => {
     res.status(200).send(doc);
-  },(e) => {
+  }).catch((e) => {
     res.status(400).send(e);
-  }).catch(console.log);
+  });
 });
 
 
@@ -45,9 +45,7 @@ app.get('/todos',(req,res) => {
     res.send({
       todos
     });
-  },(e) => {
-    res.status(400).send(e);
-  }).catch(console.log);
+  }).catch(e => {res.status(400).send(e);});
 });
 
 //fetching ID from url
@@ -127,6 +125,24 @@ app.patch('/todos/:id',(req,res) => {
   })
 });
 
+
+// POST /users
+
+app.post('/users',(req,res) =>{
+  var body = _.pick(req.body,['email','password']);
+  if(!Object.keys(body).length == 0){
+    var user = new User(body);
+
+    user.save().then(() => {
+      return user.generateAuthToken();
+    }).then((token) => {
+      console.log(token);
+      res.header('x-auth', token).send(user);
+    }).catch((e) => {
+      res.status(400).send(e);
+    });
+  }
+});
 
 
 Promise.reject(new Error('Following Errors:'));
