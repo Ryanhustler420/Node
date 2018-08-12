@@ -1,9 +1,11 @@
 const expect = require('expect');
 const request = require('supertest');
 const {ObjectID} = require('mongodb');
+const bcrypt = require('bcryptjs');
 
 const { app } = require('./../server');
 const { Todo } = require('./../models/todos');
+const { User } = require('../models/users');
 const {populateTodos,todos,users,populateUsers} = require('./seed/seed');
 
 //run before every test case
@@ -188,4 +190,88 @@ describe('PATCH /todo/:id',() => {
       //200,
       //completed = false text is changed completedAt = null
   });
-})
+});
+
+describe('GET /users/me', () => {
+  it('should return user if authenticated',(done) => {
+    var authToken = users[0].tokens[0].token;
+      request(app)
+      .get('/users/me')
+      .set('x-auth',authToken)
+      .expect(200)
+      .expect(res => {
+        expect(res.body._id).toBe(users[0]._id.toHexString());
+        expect(res.body.email).toBe(users[0].email);
+      })
+      .end(done);
+  });
+
+  it('should return 401 if not authenticated',(done) =>{
+    request(app)
+    .get('/users/me')
+    .expect(401)
+    .expect(res => {
+      expect(Object.keys(res.body).length).toBe(0);
+    })
+    .end(done);
+  });
+});
+
+
+describe('POST /users',() => {
+    it('should create a user',(done) => {
+      var email = "sauravGupta9840@gmail.com";
+      var password = "123456abc";
+      //email address must be unique for passing this test
+      request(app)
+      .post('/users')
+      .expect(200)
+      .send({email,password})
+      .expect(res => {
+        //we can check the data here also
+        // expect(res.headers['x-auth']).toExist();
+        // expect(res.body._id).toExist();
+      })
+      .end((err) => {
+        if(err){
+          return done(err);
+        }
+
+        User.findOne({email}).then((user) => {
+          // expect(user).toExist();
+          // expect(user.password).toNotBe(password);
+          expect(user.email).toBe(email);
+          bcrypt.compare(password,user.password, (err,result) => {
+            expect(result).toBe(true);
+          });
+          done();
+        })
+      });
+    });
+
+    it('should return validation error if request invalid',(done) => {
+      var email = "sauragmail.com";
+      var password = "123abc";
+      //email address must be unique for passing this test
+      request(app)
+      .post('/users')
+      .expect(400)
+      .send({email,password})
+      .end(done);
+    });
+
+    it('should not create user if email in use',(done) => {
+      var email = "sauravGupta9840@gmail.com";
+      var password = "123456abc";
+      //email address must be unique for passing this test
+      request(app)
+      .post('/users')
+      .expect(200)
+      .send({email,password})
+      .expect(res => {
+        //we can check the data here also
+        // expect(res.headers['x-auth']).toExist();
+        // expect(res.body._id).toExist();
+      }).end(done);
+    });
+});
