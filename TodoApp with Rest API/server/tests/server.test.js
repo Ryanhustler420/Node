@@ -11,7 +11,8 @@ const {populateTodos,todos,users,populateUsers} = require('./seed/seed');
 //run before every test case
 beforeEach(populateTodos);
 beforeEach(populateUsers);
-
+// describe.only('POST /todos') can be helpfull when you want to run only one test case
+// Best practice: Use .skip() instead of commenting tests out.
 describe('POST /todos',() => {
   it('should create a new todo',(done) => {
     // request(app).get('')
