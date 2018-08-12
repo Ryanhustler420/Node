@@ -136,7 +136,6 @@ app.post('/users',(req,res) =>{
     user.save().then(() => {
       return user.generateAuthToken();
     }).then((token) => {
-      console.log(token);
       res.header('x-auth', token).send(user);
     }).catch((e) => {
       res.status(400).send(e);
@@ -154,8 +153,6 @@ Promise.reject(new Error('Following Errors:'));
 app.listen(port,() => {
   console.log(`Starting up at port ${port}`,'new service starts here');
 });
-
-
 
 // module.exports = {app}; uncommand for TTD
 module.exports = {app};
