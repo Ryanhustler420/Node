@@ -89,6 +89,7 @@ UserSchema.statics.findByToken = function(token) {
 
 
 UserSchema.pre('save',function(next){
+  //this function uses user model field because this point of time that is populated with data
     var user = this;
 
     if(user.isModified('password')){
