@@ -86,7 +86,15 @@ UserSchema.statics.findByToken = function(token) {
     'tokens.access':'auth'
   });
 };
-
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjcxNzE5NTc1ZDJkMDIxNzBhMzI0NmQiLCJhY2Nlc3MiOiJhdXRoIiwiaWF0IjoxNTM0MTYxMzAxfQ.ujqA2XbKqqyer3-zango046jyhUWbF-s7sS7hhSE_Xs
+UserSchema.methods.removeToken = function(token){
+    var user = this;
+    return user.update({
+      $pull:{
+          tokens:{token}
+      }
+    });
+};
 
 UserSchema.pre('save',function(next){
   //this function uses user model field because this point of time that is populated with data
