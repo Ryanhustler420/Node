@@ -8,6 +8,7 @@ var authenticate = (req,res,next) => {
       // res.status(401).send();
       return Promise.reject();
     }
+    //we can set any property which we want to excess from outside
     req.user = user;
     req.token = token;
     next();
