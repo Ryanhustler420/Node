@@ -1,0 +1,5 @@
+heroku config:set NAME=Gaurav
+heroku config:get NAME
+heroku config:unset NAME  //naver do this for api and secret keys
+heroku config:set JWT_SECRET=your jubrish words
+push to heroku  master //git push heroku master
