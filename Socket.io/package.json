@@ -1,5 +1,5 @@
 {
-  "name": "Socket.io app",
+  "name": "socket.io",
   "version": "1.0.0",
   "description": "Project with Node.js and Socket.io",
   "main": "index.js",
