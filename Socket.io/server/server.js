@@ -11,35 +11,21 @@ var io = socketIO(server);
 
 app.use(express.static(publicPath));
 
-//register an event listener we listen for
-// diffrent event and do something with that
-
-var emailStore = [{
-  from:'Gupta@example.com',
-  text:'Hey. What is going on.',
-  createdAt:123
-},{
-  from:'Mike@example.com',
-  text:'Gaurav Happy Birthday',
-  createdAt:123
-},{
-  from:'Jane@example.com',
-  text:'Hey.Gaurav are you there',
-  createdAt:123
-}];
-
-//this is for server event
 io.on('connection',(socket) => {
   console.log('new user connected!');
 
-  //Sender
-  socket.emit('newMessage',emailStore);
-
-  //Receiver
+  //called by client like socket.emit('createMessage',{from:"user",text:'watching tv'});
   socket.on('createMessage',(createdMessage) => {
-    console.log('userCreatedMessage',createdMessage);
+    io.emit('newMessage',{
+      from:createdMessage.from,
+      text:createdMessage.text,
+      createdAt:new Date().getTime()
+    });
   });
 
+  socket.on('disconnect',() => {
+    console.log('User was disconnected');
+  });
 });
 
 server.listen(port,() => {
