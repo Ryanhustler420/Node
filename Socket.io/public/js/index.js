@@ -10,11 +10,25 @@ socket.on('connect',function(){
 // and trigger the server emitters.
 socket.on('newMessage',function(emails){
   console.log('newMessage',emails);
+  var li = jQuery('<li></li>');
+  li.text(`${emails.from}: ${emails.text}`);
+
+  jQuery('#messages').append(li);
 });
 
-socket.emit('createMessage',{
-  from:'Frank',
-  text:'Hi\''
-},function(){
-  console.log('got it');
+// socket.emit('createMessage',{
+//   from:'Frank',
+//   text:'Hi\''
+// },function(){
+//   console.log('got it');
+// });
+
+jQuery('#message-form').on('submit',function(e){
+  e.preventDefault();
+  socket.emit('createMessage',{
+    from:'User',
+    text:jQuery('[name=message]').val()
+  },function(){
+    //some code here...
+  })
 });
