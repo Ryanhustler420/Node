@@ -11,3 +11,10 @@ socket.on('connect',function(){
 socket.on('newMessage',function(emails){
   console.log('newMessage',emails);
 });
+
+socket.emit('createMessage',{
+  from:'Frank',
+  text:'Hi\''
+},function(){
+  console.log('got it');
+});
