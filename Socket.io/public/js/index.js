@@ -3,29 +3,41 @@ var socket = io();
 
 socket.on('connect',function(){
   console.log('connected to server');
-  socket.emit('informAll',{userName:'Gaurav'});
+  socket.emit('informAll',{userName:'Anonymouse'});
 });
 
 //this function is as generic function and will be called as soon as user connected with server
 // and trigger the server emitters.
 socket.on('newMessage',function(emails){
-  console.log('newMessage',emails);
-  var li = jQuery('<li></li>');
-  li.text(`${emails.from}: ${emails.text}`);
+  var template = jQuery('#message-template').html();
+  var html = Mustache.render(template,{
+    from:emails.from,
+    text:emails.text,
+    time:emails.createdAt
+  });
 
-  jQuery('#messages').append(li);
+  jQuery('#messages').append(html);
 });
 
 
 socket.on('newLocationMessage',function(message){
-  var li = jQuery('<li></li>');
-  var a = jQuery('<a target="_blank">My Current Location</a>');
+  // var li = jQuery('<li></li>');
+  // var a = jQuery('<a target="_blank">My Current Location</a>');
+  //
+  // li.text(`${message.from}:`);
+  // a.attr('href',message.url);
+  //
+  // li.append(a);
+  // url
 
-  li.text(`${message.from}:`);
-  a.attr('href',message.url);
+  var template = jQuery('#location-message-template').html();
+  var html = Mustache.render(template,{
+    from:message.from,
+    url:message.url,
+    time:message.createdAt
+  });
 
-  li.append(a);
-  jQuery('#messages').append(li);
+  jQuery('#messages').append(html);
 });
 // socket.emit('createMessage',{
 //   from:'Frank',
