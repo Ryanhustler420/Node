@@ -27,7 +27,7 @@ io.on('connection',(socket) => {
   //called by client like socket.emit('createMessage',{from:"user",text:'watching tv'});
   socket.on('createMessage',(createdMessage,callback) => {
     io.emit('newMessage',generateMessage(createdMessage.from,createdMessage.text));
-    callback('this is from the server');
+    callback('');
     // broadcast => with broadcast we can send data to all user but we cant
     // see the message back object this is very helpful when we connected to
     // the app where all users will know that "SomeUserName" connect and we will
