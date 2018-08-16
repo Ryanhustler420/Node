@@ -21,9 +21,32 @@ function scrollToBottom(){
 
 
 socket.on('connect',function(){
-  console.log('connected to server');
-  socket.emit('informAll',{userName:'Anonymouse'});
+  var params = deparam(window.location.search);
+
+  socket.emit('join',params,function(err){
+    if(err){
+      alert(err);
+      window.location.href='/';
+    }else{
+      console.log("welcome to chat room");
+    }
+  });
 });
+
+socket.on('disconnect',function(){
+  console.log('Disconnected from server');
+});
+
+socket.on('updateUserList',function(users) {
+  // console.log('Users list',users);
+  var ul = jQuery('<ol></ol>');
+  users.forEach(function(user){
+    ul.append(jQuery('<li></li>').text(user));
+  });
+
+  jQuery('#users').html(ul);
+});
+
 
 //this function is as generic function and will be called as soon as user connected with server
 // and trigger the server emitters.
@@ -38,7 +61,6 @@ socket.on('newMessage',function(emails){
   jQuery('#messages').append(html);
   scrollToBottom();
 });
-
 
 socket.on('newLocationMessage',function(message){
   // var li = jQuery('<li></li>');
@@ -71,9 +93,9 @@ jQuery('#message-form').on('submit',function(e){
   e.preventDefault();
 
   var messageTextbox = jQuery('[name=message]');
-
+  var params = deparam(window.location.search);
   socket.emit('createMessage',{
-    from:'User',
+    from:params.name,
     text:messageTextbox.val()
   },function(){
     messageTextbox.val('');
