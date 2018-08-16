@@ -41,15 +41,19 @@ io.on('connection',(socket) => {
     socket.emit('newMessage',generateMessage('Admin','Welcome to chat app'));
 
     //here user information is populating via user connection to server
-    socket.broadcast.to(params.room).emit('newMessage',generateMessage(params.name,'is now joined'));
+    socket.broadcast.to(params.room).emit('newMessage',generateMessage('Admin',`${params.name} is now joined`));
 
     callback();
   });
 
   //called by client like socket.emit('createMessage',{from:"user",text:'watching tv'});
   socket.on('createMessage',(createdMessage,callback) => {
-    io.emit('newMessage',generateMessage(createdMessage.from,createdMessage.text));
-    callback('');
+    var user = users.getUser(socket.id);
+
+    if(user && isRealString(createdMessage.text)){
+      io.to(user.roomName).emit('newMessage',generateMessage(user.name,createdMessage.text));
+      callback('');
+    }
     // broadcast => with broadcast we can send data to all user but we cant
     // see the message back object this is very helpful when we connected to
     // the app where all users will know that "SomeUserName" connect and we will
@@ -62,7 +66,9 @@ io.on('connection',(socket) => {
   });
 
   socket.on('createLocationMessage',(coords) => {
-    io.emit('newLocationMessage',generateLocationMessage('Admin',coords.latitude,coords.longitude));
+    var user = users.getUser(socket.id);
+    if(user)
+      io.to(user.roomName).emit('newLocationMessage',generateLocationMessage(user.name,coords.latitude,coords.longitude));
   });
 
   socket.on('disconnect',() => {
