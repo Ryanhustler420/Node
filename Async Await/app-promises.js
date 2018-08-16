@@ -55,4 +55,40 @@ const getStatus = (userId) => {
   });
 };
 
-getStatus(1).then(status => console.log(status)).catch(e => console.log(e));
+//async await
+// () => {
+//   return new Promise((resolve,reject)=>{
+//     resolve('Mike')
+//   });
+// }
+
+//async return always promises
+//whenever throwing an Error from async function thats simply means we are rejecting promise
+
+const getStatusAlt = async (userId) => {
+  // throw new Error('This is an Error');
+  // return Promise.reject('Error');
+
+  //    const user = getUser(userId);
+  // => Promise { { id: 2, name: 'Anjali', schoolId: 999 } }
+
+  // const user = await getUser(userId);
+  // => { id: 2, name: 'Anjali', schoolId: 999 }
+
+  const user = await getUser(userId);
+  const grades = await getGrades(user.schoolId);
+  let average = 0;
+
+  if(grades.length > 0){
+   average = grades.map((grade) => grade.grade).reduce((a,b) => a+b) / grades.length;
+  }
+
+  return `${user.name} has a ${average}% in the class`;
+};
+
+// console.log(getStatusAlt());
+getStatusAlt(1).then((status) => {
+  console.log(status);
+}).catch(console.log);
+
+// getStatus(1).then(status => console.log(status)).catch(e => console.log(e));
